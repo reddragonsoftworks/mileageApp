@@ -21,6 +21,33 @@
 		<script>
 			var deviceReady = function() {
 				//alert('device is ready');
+				console.log = function(m) // rewrite the console.log function to output commands to the settings page.
+				{
+					var el = document.createElement('li');
+					el.innerText = m;
+			  		c = document.getElementById('console');
+					c.appendChild(el);
+				
+				}
+				console.err = function(m) // rewrite the console.log function to output commands to the settings page.
+				{
+					var el = document.createElement('li');
+					el.innerText = m;
+			  		c = document.getElementById('console');
+			  		el.style.color = "red";
+					c.appendChild(el);
+				
+				}
+				console.error = function(m) // rewrite the console.log function to output commands to the settings page.
+				{
+					var el = document.createElement('li');
+					el.innerText = m;
+			  		c = document.getElementById('console');
+			  		c.style.color = "red"
+					c.appendChild(el);
+				
+				}
+				
 				// start angular
 				angular.element(document).ready(function() {
 					angular.bootstrap(document, ["Mileage"]);
@@ -72,6 +99,7 @@
 			<div id="login" ng-controller="MapController" ng-switch on="active" class="jqtAppPane">
 				<div ng-switch-when="true">
 					<div class="toolbar">
+					<a class="button sildeleft" href="#settings" >Settings</a>
 						<h1>Mileage</h1>
 					</div>
 					<div class="form">
@@ -86,6 +114,43 @@
 				<div ng-switch-default></div>
 
 			</div>
+			
+			
+			<div id="settings"  class="jqtAppPane">
+					<div class="toolbar">
+						<h1>Mileage</h1>
+						<a class="back" href="#" >Back</a>
+					</div>
+					<div class="form">
+						<ul>
+							<li class="rounded">
+								<h1><a href="#logoutput">View Console</a></h1>
+							</li>
+							
+
+						</ul>
+
+					</div>
+				
+			
+			</div>
+			
+			<div id="logoutput"  class="jqtAppPane">
+					<div class="toolbar">
+						<h1>Mileage Developer Console</h1>
+						<a class="back" href="#" >Back</a>
+					</div>
+					<div class="form">
+						<ul id="console">
+							
+
+						</ul>
+
+					</div>
+				
+			
+			</div>
+			
 
 			<div id="func" ng-controller="MapController" ng-switch on="active" class="jqtAppPane">
 				
