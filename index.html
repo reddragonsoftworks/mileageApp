@@ -1,0 +1,121 @@
+<html>
+	<head id="head">
+		<script type="text/javascript" src="src/jquery/jquery-1.7.min.js"></script>
+			<script src="src/rdsMileageApp.js"></script>
+
+		
+		<script src="src/jqtouch/jqtouch.js"></script>
+		<script src="src/jqtouch/jqtBootstrap.js"></script>
+		<script src="src/angular/angular-1.0.1.min.js"></script>
+		<script src="src/angular/angular-resource.min.js"></script>
+		<script src="src/app/app.js"></script>
+		<script src="src/app/services.js"></script>
+		<script src="src/app/controllers.js"></script>
+		<script src="src/LatLong/Geo.js"></script>
+		<script src="src/LatLong/OsGridRef.js"></script>
+		<script src="src/LatLong/LatLon.js"></script>
+		<script src="src/LatLong/coordtransform.js"></script>
+
+		<link rel="stylesheet" href="src/jqtouch/allTheme/styles.css"/>
+
+		<script>
+			var deviceReady = function() {
+				//alert('device is ready');
+				// start angular
+				angular.element(document).ready(function() {
+					angular.bootstrap(document, ["Mileage"]);
+				});
+
+				//start jQT
+				temp_startjqt2();
+
+			}
+			var onLoad = function() {
+				document.addEventListener('deviceready', deviceReady, true);			
+					rds.Mileage.disLog();				
+				
+			}
+			temp_startjqt1();
+
+			if (!window.cordova) {
+				deviceReady();
+			}
+
+		</script>
+
+		<style type="text/css" media="screen">
+			#jqt.fullscreen #home .info {
+				display: none;
+			}
+			div#jqt #about {
+				padding: 100px 10px 40px;
+				text-shadow: rgba(255, 255, 255, 0.3) 0px -1px 0;
+				font-size: 13px;
+				text-align: center;
+				background: #161618;
+			}
+			div#jqt #about p {
+				margin-bottom: 8px;
+			}
+			div#jqt #about a {
+				color: #fff;
+				font-weight: bold;
+				text-decoration: none;
+			}
+		</style>
+
+	</head>
+	<body onload="onLoad()">
+
+		<div id='jqt'>
+
+			<div id="login" ng-controller="MapController" ng-switch on="active" class="jqtAppPane">
+				<div ng-switch-when="true">
+					<div class="toolbar">
+						<h1>Mileage</h1>
+					</div>
+					<div class="form">
+						<h2>this will be the login page!</h2>
+						<ul>
+							<li><a href="#" ng-click="goTo('#func')">Begin Application</a></li>
+							
+						</ul>
+						
+					</div>
+				</div>
+				<div ng-switch-default></div>
+
+			</div>
+
+			<div id="func" ng-controller="MapController" ng-switch on="active" class="jqtAppPane">
+				
+				
+				<div ng-switch-when="true" >
+					<div class="toolbar">
+						<h1>Mileage</h1>
+						<a class="back" href="#back">Back</a>
+					</div>
+					<div class="form">
+					<div class="click-btn" ng-switch on="started()">
+												
+						<img ng-switch-when="false" ng-click='changeState()' src="src/resources/start.png" width="100"/>
+						<img ng-switch-when="true" ng-click='changeState()' src="src/resources/stop.png" width="100"/>
+						<div ng-switch-default>							
+						</div>
+					</div>
+
+					</div>
+
+					
+				</div>
+				<div ng-switch-default ></div>
+
+			</div>
+
+		
+
+		</div><!-- JQT Div Holder -->
+
+	</body>
+</html>
+
