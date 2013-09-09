@@ -1,9 +1,4 @@
-
-
-
-
-
-function MapController($scope,MapSvc)
+function TrackingController($scope,MapSvc)
 {
 
 	$scope.goTo = function(e)

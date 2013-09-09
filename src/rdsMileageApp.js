@@ -5,14 +5,40 @@ var rds = rds || {};
 		/* RDS Mileage Functions Base Platform */
 	rdsBase.Mileage = {};
 	
-	
+	rdsBase.Mileage.testPoints = [{lat:53.319569,lon:-4.240444},
+	                              {lat:53.319813,lon:-4.239607},
+	                              {lat:53.320210,lon:-4.238276},
+	                              {lat:53.320813,lon:-4.237139},
+	                              {lat:53.321210,lon:-4.236131},
+	                              {lat:53.321312,lon:-4.234972},
+	                              {lat:53.321505,lon:-4.233749},
+	                              {lat:53.321799,lon:-4.232590},
+	                              {lat:53.322222,lon:-4.230616},
+	                              {lat:53.322094,lon:-4.228899},
+	                              {lat:53.321889,lon:-4.227870}]
 	
 	rdsBase.Mileage.distance = 0;
 	
-	rdsBase.Mileage.lastPoint = [null,null]
+	rdsBase.Mileage.lastPoint = [{lat:null,lon:null}]
 	
 	rdsBase.Mileage.started = false;
 	rdsBase.Mileage.cycles = 0;
+	rdsBase.Mileage.count = 0;
+	
+	rdsBase.Mileage.calcDistance = function(lat1,lon1,lat2,lon2){
+		var R = 6371; // km
+		var dLat = (lat2-lat1).toRad();
+		var dLon = (lon2-lon1).toRad();
+		var lat1 = lat1.toRad();
+		var lat2 = lat2.toRad();
+		
+		var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+		var d = R * c;
+		
+		return d * 0.62137;
+	}
 	
 	
 	rdsBase.Mileage.disLog = function()
@@ -20,68 +46,41 @@ var rds = rds || {};
 		
 		if(rdsBase.Mileage.started)
 		{
-			if(rdsBase.Mileage.cycles > 5)
+			if(rdsBase.Mileage.cycles > 5) // allow for calibration cycles
 			{
-				if(rdsBase.Mileage.lastPoint[0] == null)
+				if(rdsBase.Mileage.lastPoint[0].lat == null)
 				{
-				//starting with points
+					
 					 navigator.geolocation.getCurrentPosition(function(position){
-					 	rdsBase.Mileage.lastPoint[0] = position.coords.latitude;
-					 	rdsBase.Mileage.lastPoint[1] = position.coords.longitude;
-					 	
+					 	rdsBase.Mileage.lastPoint[0] = {lat:position.coords.latitude,lon:position.coords.longitude}
+					 	count = 1;
 					 },{ enableHighAccuracy: true });
 				}
 				else
 				{
 					 navigator.geolocation.getCurrentPosition(function(position){
 					 	
-					 	if(rdsBase.Mileage.lastPoint[1] >  position.coords.longitude)
-					 	{
+					 	
 					 		var lon1 =  position.coords.longitude;				 	
-					 		var lon2 = rdsBase.Mileage.lastPoint[1];
+					 		var lon2 = rdsBase.Mileage.lastPoint[rdsBase.Mileage.lastPoint.length].lon;
+					 		var lat1 = position.coords.latitude;
+						 	var lat2 = rdsBase.Mileage.lastPoint[rdsBase.Mileage.lastPoint.length].lat;
 					 	
-					 	}
-					 	else
-					 	{
-					 		var lon2 =  position.coords.longitude;	
-					 		var lon1 = rdsBase.Mileage.lastPoint[1];
-					 	}
 					 	
-					 	if(rdsBase.Mileage.lastPoint[0] > position.coords.latitude)
-					 	{
-						 	var lat1 = position.coords.latitude;
-						 	var lat2 = rdsBase.Mileage.lastPoint[0];
-					 	}
-					 	else
-					 	{
-					 		var lat2 = position.coords.latitude;
-					 		var lat1 = rdsBase.Mileage.lastPoint[0];
-					 	}
-					 	
-					 	var R = 6371; // km
-						var dLat = (lat2-lat1).toRad();
-						var dLon = (lon2-lon1).toRad();
-						var lat1 = lat1.toRad();
-						var lat2 = lat2.toRad();
+					
 						
-						var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-						        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-						var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-						var d = R * c;
-						
-						rdsBase.Mileage.distance += d;
+						rdsBase.Mileage.distance += rdsBase.Mileage.calcDistance(lat1,lon1,lat2,lon2); // now in miles
 					 	
-					 	rdsBase.Mileage.lastPoint[0] = position.coords.latitude;
-					 	rdsBase.Mileage.lastPoint[1] = position.coords.longitude;
-					 		
+					 	rdsBase.Mileage.lastPoint[count] = {lat:position.coords.latitude,lon:position.coords.longitude};
+					 		count++;
 					 },{ enableHighAccuracy: true });
 				}
 			}
 			else
 			{
 				 navigator.geolocation.getCurrentPosition(function(position){
-					 rdsBase.Mileage.cycles++;	
-					 },{ enableHighAccuracy: true });
+					 rdsBase.Mileage.cycles++;	//calibration phase
+				 });
 			}
 		}
 		setTimeout(function(){

@@ -1,2 +1,2 @@
-angular.bootstrap('Hillsafe',document);
+angular.bootstrap('Mileage',document);
 test = false;

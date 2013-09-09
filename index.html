@@ -96,7 +96,7 @@
 
 		<div id='jqt'>
 
-			<div id="login" ng-controller="MapController" ng-switch on="active" class="jqtAppPane">
+			<div id="login" ng-controller="TrackingController" ng-switch on="active" class="jqtAppPane">
 				<div ng-switch-when="true">
 					<div class="toolbar">
 					<a class="button sildeleft" href="#settings" >Settings</a>
@@ -152,7 +152,7 @@
 			</div>
 			
 
-			<div id="func" ng-controller="MapController" ng-switch on="active" class="jqtAppPane">
+			<div id="func" ng-controller="TrackingController" ng-switch on="active" class="jqtAppPane">
 				
 				
 				<div ng-switch-when="true" >
@@ -163,8 +163,8 @@
 					<div class="form">
 					<div class="click-btn" ng-switch on="started()">
 												
-						<img ng-switch-when="false" ng-click='changeState()' src="src/resources/start.png" width="100"/>
-						<img ng-switch-when="true" ng-click='changeState()' src="src/resources/stop.png" width="100"/>
+						<img ng-switch-when="false" ng-click='changeState()' src="src/resources/start.png" width="100%"/>
+						<img ng-switch-when="true" ng-click='changeState()' src="src/resources/stop.png" width="100%"/>
 						<div ng-switch-default>							
 						</div>
 					</div>
